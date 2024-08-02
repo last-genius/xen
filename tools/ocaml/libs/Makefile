@@ -4,7 +4,7 @@ include $(XEN_ROOT)/tools/Rules.mk
 SUBDIRS= \
 	mmap \
 	eventchn xc \
-	xb xs
+	xb xs xenstoredglue
 
 .PHONY: all
 all: subdirs-all
