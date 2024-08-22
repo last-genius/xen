@@ -743,6 +743,7 @@ XEN_PAGING_DIR
 XEN_LOCK_DIR
 INITD_DIR
 SHAREDIR
+XEN_CTRL_DOMAININFO_PLUGIN
 XEN_LIB_DIR
 XEN_RUN_STORED
 XEN_LOG_DIR
@@ -4528,6 +4529,12 @@ XEN_LIB_DIR=$localstatedir/lib/xen
 
 
 printf "%s\n" "#define XEN_LIB_DIR \"$XEN_LIB_DIR\"" >>confdefs.h
+
+
+XEN_CTRL_DOMAININFO_PLUGIN=$LIBEXEC_BIN/xenctrl_plugin
+
+
+printf "%s\n" "#define XEN_CTRL_DOMAININFO_PLUGIN \"$XEN_CTRL_DOMAININFO_PLUGIN\"" >>confdefs.h
 
 
 SHAREDIR=$prefix/share
