@@ -121,19 +121,23 @@ let cleanup doms =
   let notify = ref false in
   let dead_dom = ref [] in
 
-  Hashtbl.iter
-    (fun id _ ->
-       if id <> 0 then (
+  Array.iter
+    (fun info ->
+       if Hashtbl.mem doms.table info.Plugin.domid then (
          try
-           let info = Plugin.domain_getinfo handle id in
            if info.Plugin.shutdown || info.Plugin.dying then (
-             debug "Domain %u died (dying=%b, shutdown %b -- code %d)" id
-               info.Plugin.dying info.Plugin.shutdown info.Plugin.shutdown_code;
-             if info.Plugin.dying then dead_dom := id :: !dead_dom else notify := true)
+             debug "Domain %u died (dying=%b, shutdown %b -- code %d)"
+               info.Plugin.domid info.Plugin.dying info.Plugin.shutdown
+               info.Plugin.shutdown_code;
+
+             if info.Plugin.dying then dead_dom := info.Plugin.domid :: !dead_dom
+             else notify := true)
+
          with Plugin.Error _ ->
-           debug "Domain %u died -- no domain info" id;
-           dead_dom := id :: !dead_dom))
-    doms.table;
+           debug "Domain %u died -- no domain info" info.Plugin.domid;
+           dead_dom := info.Plugin.domid :: !dead_dom))
+    (Plugin.domain_getinfolist handle);
+  doms.table;
   List.iter
     (fun id ->
        let dom = Hashtbl.find doms.table id in
